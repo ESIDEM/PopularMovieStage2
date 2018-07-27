@@ -81,12 +81,15 @@ public class MainActivityFragment extends Fragment {
                 itemPosition = position;
             }
         });
+        int index = gridViewMovie.getFirstVisiblePosition();
 
 
 
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_SELECTED_POSITION)) {
             itemPosition = savedInstanceState.getInt(KEY_SELECTED_POSITION);
         }
+
+        gridViewMovie.smoothScrollToPosition(index);
         return view;
     }
 

@@ -34,7 +34,7 @@ import ng.com.techdepo.popularmoviestage2.movie_model.Trailer;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewsDetailActivityFragment extends Fragment {
+public class MovieDetailFragment extends Fragment {
 
     private static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/";
     private static final String LOGO_SIZE = "w500";
@@ -59,7 +59,7 @@ public class NewsDetailActivityFragment extends Fragment {
     private ArrayList<Review> reviewsList;
 
 
-    public NewsDetailActivityFragment() {
+    public MovieDetailFragment() {
     }
 
     @Override
@@ -68,7 +68,7 @@ public class NewsDetailActivityFragment extends Fragment {
         if (savedInstanceState == null) {
             Bundle arguments = getArguments();
             if (arguments != null) {
-                movie = arguments.getParcelable(NewsDetailActivityFragment.MOVIE_KEY);
+                movie = arguments.getParcelable(MovieDetailFragment.MOVIE_KEY);
             } else {
                 movie = getActivity().getIntent().getParcelableExtra(MOVIE_KEY);
             }

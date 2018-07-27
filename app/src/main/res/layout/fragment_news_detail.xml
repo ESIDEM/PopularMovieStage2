@@ -9,7 +9,7 @@ android:layout_height="match_parent">
     android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="vertical"
-    tools:context="ng.com.techdepo.popularmoviestage2.NewsDetailActivityFragment">
+    tools:context="ng.com.techdepo.popularmoviestage2.MovieDetailFragment">
 
     <TextView
         android:id="@+id/title"

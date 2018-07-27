@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         if (mTowpane) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(MOVIE_KEY, movie);
-            NewsDetailActivityFragment fragment = new NewsDetailActivityFragment();
+            MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container_detail, fragment, DETAIL_MOVIE_FRAGMENT_TAG)
