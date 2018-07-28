@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -131,7 +132,7 @@ public class MovieDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 favouriteButton();
-            }
+                          }
         });
         trailersTitle = (TextView) view.findViewById(R.id.trailers_title);
         reviewsTitle = (TextView) view.findViewById(R.id.review_title);
@@ -255,7 +256,8 @@ public class MovieDetailFragment extends Fragment {
             addFavouriteMovieViewModel.insertItem(movieEntity);
             isMarkFavorite = true;
         }
-        updateButtonImage();
+
+                updateButtonImage();
     }
 
     @SuppressWarnings("StringBufferReplaceableByString")
