@@ -1,5 +1,8 @@
 package ng.com.techdepo.popularmoviestage2;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,9 +30,12 @@ import ng.com.techdepo.popularmoviestage2.callbacks.ReviewCallBack;
 import ng.com.techdepo.popularmoviestage2.callbacks.TrailerAdapterCallback;
 import ng.com.techdepo.popularmoviestage2.callbacks.TrailerCallback;
 import ng.com.techdepo.popularmoviestage2.database.FavoriteContract;
+import ng.com.techdepo.popularmoviestage2.database.MovieEntity;
 import ng.com.techdepo.popularmoviestage2.movie_model.Movies;
 import ng.com.techdepo.popularmoviestage2.movie_model.Review;
 import ng.com.techdepo.popularmoviestage2.movie_model.Trailer;
+import ng.com.techdepo.popularmoviestage2.view_models.AddFavouriteMovieViewModel;
+import ng.com.techdepo.popularmoviestage2.view_models.ReadMovieViewModel;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -57,6 +63,7 @@ public class MovieDetailFragment extends Fragment {
     private boolean isMarkFavorite;
     private ArrayList<Trailer> trailersList;
     private ArrayList<Review> reviewsList;
+    private boolean movieExist = false;
 
 
     public MovieDetailFragment() {
@@ -87,23 +94,25 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private boolean MovieIsFavourite(int movieId) {
-        Cursor cursor = getActivity().getContentResolver()
-                .query(FavoriteContract.FavoriteEntry.CONTENT_URI,
-                        new String[]{FavoriteContract.FavoriteEntry.MOVIE_ID}, null, null, null);
-        assert cursor != null;
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            do {
-                int id = cursor.getInt(cursor.getColumnIndex(
-                        FavoriteContract.FavoriteEntry.MOVIE_ID));
-                if (id == movieId) {
-                    cursor.close();
-                    return true;
-                }
-            } while (cursor.moveToNext());
 
-        }
-        cursor.close();
+
+        ReadMovieViewModel viewModel = ViewModelProviders.of(this).get(ReadMovieViewModel.class);
+        viewModel.getMovie(movieId).observe(this, new Observer<MovieEntity>() {
+            @Override
+            public void onChanged(@Nullable MovieEntity movieEntity) {
+                if(movieEntity==null){
+                    movieExist = false;
+                }else {
+
+                    movieExist = true;
+                }
+            }
+        });
+
+       if (movieExist){
+
+           return true;
+       }
         return false;
     }
 
@@ -235,25 +244,15 @@ public class MovieDetailFragment extends Fragment {
 
     private void favouriteButton() {
         if (isMarkFavorite) {
-            getActivity().getContentResolver()
-                    .delete(FavoriteContract.FavoriteEntry.CONTENT_URI,
-                            FavoriteContract.FavoriteEntry.MOVIE_ID + " = ? ",
-                            new String[]{String.valueOf(movie.getMovieId())});
-
+            AddFavouriteMovieViewModel addFavouriteMovieViewModel = ViewModelProviders.of(this).get(AddFavouriteMovieViewModel.class);
+            addFavouriteMovieViewModel.deleteItem(movie.getMovieId());
             isMarkFavorite = false;
         } else {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(FavoriteContract.FavoriteEntry.MOVIE_ID, movie.getMovieId());
-            contentValues.put(FavoriteContract.FavoriteEntry.TITLE, movie.getTitle());
-            contentValues.put(FavoriteContract.FavoriteEntry.POSTER_PATH, movie.getPosterPath());
-            contentValues.put(FavoriteContract.FavoriteEntry.OVERVIEW, movie.getOverview());
-            contentValues.put(FavoriteContract.FavoriteEntry.VOTE_AVERAGE, movie.getVoteAverage());
-            contentValues.put(FavoriteContract.FavoriteEntry.RELEASE_DATE, movie.getReleaseDate());
-            contentValues.put(FavoriteContract.FavoriteEntry.MOVIE_RUNTIME,
-                    movie.getMovieRuntime());
 
-            getActivity().getContentResolver()
-                    .insert(FavoriteContract.FavoriteEntry.CONTENT_URI, contentValues);
+            MovieEntity movieEntity = new MovieEntity(movie.getMovieId(),movie.getTitle(),movie.getPosterPath(),movie.getOverview(),
+                    movie.getVoteAverage(),movie.getReleaseDate(),movie.getMovieRuntime());
+            AddFavouriteMovieViewModel addFavouriteMovieViewModel = ViewModelProviders.of(this).get(AddFavouriteMovieViewModel.class);
+            addFavouriteMovieViewModel.insertItem(movieEntity);
             isMarkFavorite = true;
         }
         updateButtonImage();

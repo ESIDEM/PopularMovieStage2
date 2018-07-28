@@ -1,8 +1,12 @@
 package ng.com.techdepo.popularmoviestage2;
 
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Movie;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -18,10 +22,13 @@ import android.widget.GridView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import ng.com.techdepo.popularmoviestage2.callbacks.MyCallBack;
 import ng.com.techdepo.popularmoviestage2.database.FavoriteContract;
+import ng.com.techdepo.popularmoviestage2.database.MovieEntity;
 import ng.com.techdepo.popularmoviestage2.movie_model.Movies;
+import ng.com.techdepo.popularmoviestage2.view_models.ReadMovieViewModel;
 
 
 /**
@@ -130,37 +137,29 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void fetcFavouriteMovies() {
-        Cursor cursor = getActivity().getContentResolver()
-                .query(FavoriteContract.FavoriteEntry.CONTENT_URI, null, null, null, null);
 
         movieAdapter.clear();
-        assert cursor != null;
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            do {
-                Movies movie = new Movies(
-                        cursor.getInt(cursor.getColumnIndex(
-                                FavoriteContract.FavoriteEntry.MOVIE_ID)),
-                        cursor.getString(cursor.getColumnIndex(
-                                FavoriteContract.FavoriteEntry.TITLE)),
-                        cursor.getString(cursor.getColumnIndex(
-                                FavoriteContract.FavoriteEntry.POSTER_PATH)),
-                        cursor.getString(cursor.getColumnIndex(
-                                FavoriteContract.FavoriteEntry.OVERVIEW)),
-                        cursor.getString(cursor.getColumnIndex(
-                                FavoriteContract.FavoriteEntry.VOTE_AVERAGE)),
-                        cursor.getString(cursor.getColumnIndex(
-                                FavoriteContract.FavoriteEntry.RELEASE_DATE)),
-                        cursor.getString(cursor.getColumnIndex(
-                                FavoriteContract.FavoriteEntry.MOVIE_RUNTIME)));
-                movieList.add(movie);
-            } while (cursor.moveToNext());
-        }
-        movieAdapter.notifyDataSetChanged();
-        if (itemPosition != GridView.INVALID_POSITION) {
-            gridViewMovie.smoothScrollToPosition(itemPosition);
-        }
-        cursor.close();
+
+        ReadMovieViewModel readMovieViewModel = ViewModelProviders.of(this).get(ReadMovieViewModel.class);
+        readMovieViewModel.getMovies().observe(this, new Observer<List<MovieEntity>>() {
+            @Override
+            public void onChanged(@Nullable List<MovieEntity> movieEntities) {
+
+                for (MovieEntity movieEntity :movieEntities) {
+                    Movies movies = new Movies(movieEntity.getMovieId(),movieEntity.getTitle(),
+                            movieEntity.getPosterPath(),movieEntity.getOverview(),movieEntity.getVoteAverage(),
+                            movieEntity.getReleaseDate(),movieEntity.getMovieRuntime());
+                    movieList.add(movies);
+                }
+
+                movieAdapter.notifyDataSetChanged();
+                if (itemPosition != GridView.INVALID_POSITION) {
+                    gridViewMovie.smoothScrollToPosition(itemPosition);
+                }
+
+            }
+        });
+
     }
 
 

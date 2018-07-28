@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                     .commit();
 
         } else {
-            Intent intent = new Intent(this, NewsDetailActivity.class);
+            Intent intent = new Intent(this, MovieDetailActivity.class);
             intent.putExtra(MOVIE_KEY, movie);
             startActivity(intent);
         }
