@@ -1,11 +1,8 @@
 package ng.com.techdepo.popularmoviestage2;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -30,7 +26,6 @@ import ng.com.techdepo.popularmoviestage2.callbacks.MovieDetailsCallBack;
 import ng.com.techdepo.popularmoviestage2.callbacks.ReviewCallBack;
 import ng.com.techdepo.popularmoviestage2.callbacks.TrailerAdapterCallback;
 import ng.com.techdepo.popularmoviestage2.callbacks.TrailerCallback;
-import ng.com.techdepo.popularmoviestage2.database.FavoriteContract;
 import ng.com.techdepo.popularmoviestage2.database.MovieEntity;
 import ng.com.techdepo.popularmoviestage2.movie_model.Movies;
 import ng.com.techdepo.popularmoviestage2.movie_model.Review;

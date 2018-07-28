@@ -2,11 +2,8 @@ package ng.com.techdepo.popularmoviestage2;
 
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.graphics.Movie;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -25,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 import ng.com.techdepo.popularmoviestage2.callbacks.MyCallBack;
-import ng.com.techdepo.popularmoviestage2.database.FavoriteContract;
 import ng.com.techdepo.popularmoviestage2.database.MovieEntity;
 import ng.com.techdepo.popularmoviestage2.movie_model.Movies;
 import ng.com.techdepo.popularmoviestage2.view_models.ReadMovieViewModel;

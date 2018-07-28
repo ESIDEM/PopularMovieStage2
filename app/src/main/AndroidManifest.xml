@@ -30,10 +30,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ng.com.techdepo.popularmoviestage2.MainActivity" />
         </activity>
-        <provider
-            android:authorities="ng.com.techdepo.popularmoviestage2.database"
-            android:name=".database.FavoriteProvider"
-            android:exported="false" />
+
     </application>
 
 </manifest>
