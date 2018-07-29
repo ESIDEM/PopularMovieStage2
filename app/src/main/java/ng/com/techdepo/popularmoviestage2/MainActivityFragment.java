@@ -4,6 +4,7 @@ package ng.com.techdepo.popularmoviestage2;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +42,7 @@ public class MainActivityFragment extends Fragment {
     private MovieAdapter movieAdapter;
     private ArrayList<Movies> movieList;
     private SharedPreferences preferences;
+    int index;
 
     public interface Callback {
         void onItemSelected(Movies movie);
@@ -84,7 +87,7 @@ public class MainActivityFragment extends Fragment {
                 itemPosition = position;
             }
         });
-        int index = gridViewMovie.getFirstVisiblePosition();
+
 
 
 
@@ -92,8 +95,15 @@ public class MainActivityFragment extends Fragment {
             itemPosition = savedInstanceState.getInt(KEY_SELECTED_POSITION);
         }
 
-        gridViewMovie.smoothScrollToPosition(index);
+
         return view;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        index = gridViewMovie.getFirstVisiblePosition();
+        gridViewMovie.smoothScrollToPosition(index);
     }
 
     @Override
@@ -153,6 +163,7 @@ public class MainActivityFragment extends Fragment {
                     gridViewMovie.smoothScrollToPosition(itemPosition);
                 }
 
+
             }
         });
 
@@ -203,5 +214,6 @@ public class MainActivityFragment extends Fragment {
         editor.putString(SORT_ORDER, orderKey);
         editor.apply();
     }
+
 
 }

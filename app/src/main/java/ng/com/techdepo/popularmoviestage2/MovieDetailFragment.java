@@ -16,11 +16,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import ng.com.techdepo.popularmoviestage2.callbacks.MovieDetailsCallBack;
 import ng.com.techdepo.popularmoviestage2.callbacks.ReviewCallBack;
@@ -76,7 +78,8 @@ public class MovieDetailFragment extends Fragment {
                 movie = getActivity().getIntent().getParcelableExtra(MOVIE_KEY);
             }
             assert movie != null;
-            isMarkFavorite = MovieIsFavourite(movie.getMovieId());
+          //  isMarkFavorite = MovieIsFavourite(movie.getMovieId());
+
             trailersList = new ArrayList<>();
             reviewsList = new ArrayList<>();
             updateAdapters(movie.getMovieId());
@@ -87,29 +90,32 @@ public class MovieDetailFragment extends Fragment {
             trailersList = savedInstanceState.getParcelableArrayList(KEY_TRAILER_LIST);
             reviewsList = savedInstanceState.getParcelableArrayList(KEY_REVIEW_LIST);
         }
+
+        movieIsFavourite(movie.getMovieId());
     }
 
-    private boolean MovieIsFavourite(int movieId) {
+    private void movieIsFavourite(int movieId) {
 
 
         ReadMovieViewModel viewModel = ViewModelProviders.of(this).get(ReadMovieViewModel.class);
-        viewModel.getMovie(movieId).observe(this, new Observer<MovieEntity>() {
+        viewModel.getMovie(movieId).observe(this, new Observer<List<MovieEntity>>() {
             @Override
-            public void onChanged(@Nullable MovieEntity movieEntity) {
-                if(movieEntity==null){
-                    movieExist = false;
+            public void onChanged(@Nullable List<MovieEntity> movieEntity) {
+                if(movieEntity.size()==0){
+                    isMarkFavorite = false;
                 }else {
 
-                    movieExist = true;
+                    isMarkFavorite = true;
                 }
-            }
+
+                updateButtonImage();
+
+                           }
         });
 
-       if (movieExist){
 
-           return true;
-       }
-        return false;
+
+
     }
 
     @Override

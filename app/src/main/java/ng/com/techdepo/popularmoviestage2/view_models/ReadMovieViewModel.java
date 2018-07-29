@@ -15,7 +15,7 @@ public class ReadMovieViewModel extends AndroidViewModel {
     AppDatabase database;
 
     private LiveData<List<MovieEntity>> movies;
-    private LiveData<MovieEntity> movie;
+    private LiveData<List<MovieEntity>> movie;
 
     public ReadMovieViewModel(@NonNull Application application) {
         super(application);
@@ -30,7 +30,7 @@ public class ReadMovieViewModel extends AndroidViewModel {
         return movies;
     }
 
-    public LiveData<MovieEntity> getMovie(int movieId){
+    public LiveData<List<MovieEntity>> getMovie(int movieId){
         movie = database.movieDAO().loadMovieById(movieId);
                 return movie;
     }
