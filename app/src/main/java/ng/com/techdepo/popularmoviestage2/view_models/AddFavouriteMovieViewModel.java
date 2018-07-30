@@ -64,4 +64,5 @@ public class AddFavouriteMovieViewModel extends AndroidViewModel {
             return null;
         }
     }
+
 }

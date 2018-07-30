@@ -67,7 +67,7 @@ public class MainActivityFragment extends Fragment {
         setHasOptionsMenu(true);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-            }
+                    }
 
 
     @Override
@@ -112,6 +112,12 @@ public class MainActivityFragment extends Fragment {
         updateMovie();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+      movieAdapter.notifyDataSetChanged();
+    }
+
     private void updateMovie() {
 
             String sortingOrder = preferences.getString(SORT_ORDER,
@@ -150,6 +156,7 @@ public class MainActivityFragment extends Fragment {
         readMovieViewModel.getMovies().observe(this, new Observer<List<MovieEntity>>() {
             @Override
             public void onChanged(@Nullable List<MovieEntity> movieEntities) {
+                movieAdapter.clear();
 
                 for (MovieEntity movieEntity :movieEntities) {
                     Movies movies = new Movies(movieEntity.getMovieId(),movieEntity.getTitle(),
@@ -159,9 +166,6 @@ public class MainActivityFragment extends Fragment {
                 }
 
                 movieAdapter.notifyDataSetChanged();
-                if (itemPosition != GridView.INVALID_POSITION) {
-                    gridViewMovie.smoothScrollToPosition(itemPosition);
-                }
 
 
             }
